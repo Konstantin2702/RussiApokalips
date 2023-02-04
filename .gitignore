@@ -21,5 +21,8 @@ ExportedObj/
 *.booproj
 *.svd
 *.pdb
+*.bin
+
+
 
 
