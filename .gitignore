@@ -1,7 +1,8 @@
 */Library/
 */obj/
 */Logs/
-*/[Temp/
+*/[Tt]emp/
+*/UserSettings/
 */[Bb]uild/
 */[Bb]uilds/
 */Assets/AssetStoreTools*
