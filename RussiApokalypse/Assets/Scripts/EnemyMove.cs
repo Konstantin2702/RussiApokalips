@@ -9,6 +9,7 @@ public class EnemyMove : MonoBehaviour
     public GameObject player;
     public NavMeshAgent navMeshAgent;
     public float speed;
+    public int health;
 
     private float distanse;
 
