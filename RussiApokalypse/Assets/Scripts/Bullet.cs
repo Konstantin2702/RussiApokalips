@@ -11,12 +11,14 @@ public class Bullet : MonoBehaviour
 
     private int life = 0;
 
-    private int lifeMax = 500;
+    private int lifeMax = 300;
+
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.up * speed; //Изменение скорости
+        
     }
 
     void Update()
@@ -29,13 +31,19 @@ public class Bullet : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D hitInfo) //Метод, который срабатывает при попадании
+    void OnCollisionEnter2D(Collision2D collision) //Метод, который срабатывает при попадании
     {
-        Explode();
+        if (!collision.gameObject.tag.Equals("Player"))
+        {
+            Explode();
+        }
     }
 
     void Explode()
     {
+        
         Destroy(gameObject); //Уничтожение объекта
     }
+
+
 }

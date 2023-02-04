@@ -7,11 +7,8 @@ public class Shooting : MonoBehaviour
 {
     public Transform firePoint;
     public GameObject bulletPrefab;
-    public GameObject hitEffect;
+    public AudioClip clip;
 
-    public float bulletForce = 200f;
-
-    public int delay = 25;
     // Update is called once per frame
 
     void Update()
@@ -19,17 +16,18 @@ public class Shooting : MonoBehaviour
         if (Input.GetButton("Fire1"))
         {
             Shoot();
-            Thread.Sleep(delay);
+            Thread.Sleep(100);
         }
     }
 
     private void Shoot()
     {
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        //Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-
-        //rb.AddForce(firePoint.up * bulletForce, ForceMode2D.Force);
-   
+        PlayAudio();
+    }
+    private void PlayAudio()
+    {
+        GetComponent<AudioSource>().PlayOneShot(clip);
     }
 
 }
