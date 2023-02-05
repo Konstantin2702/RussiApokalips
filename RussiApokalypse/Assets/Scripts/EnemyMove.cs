@@ -43,7 +43,7 @@ public class EnemyMove : MonoBehaviour
                 audio.EnemyDeath(death);
                 Destroy(gameObject);
                 var generator = GameObject.FindGameObjectWithTag("Audio").GetComponent<EnemyGenerator>();
-                generator.counter--;
+               // generator.counter--;
             }
         }
         else
