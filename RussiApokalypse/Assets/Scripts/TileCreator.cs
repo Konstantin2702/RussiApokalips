@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class TileCreator : MonoBehaviour
 {
@@ -31,19 +32,22 @@ public class TileCreator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tiles = Resources.LoadAll<GameObject>("Tiles");
+        tiles = Resources.LoadAll<GameObject>("Start_finish");
         orientation = rnd.Next(0, 1);
-
+        zeroPosition = (Vector2)camera.transform.position;
         //GameObject start = grid.gameObject.transform.Find("tile_1").gameObject;
-        GameObject startTile = Instantiate(tiles[0], zeroPosition, 
+        GameObject start = tiles.First(obj => obj.tag == "Start");
+        GameObject startTile = Instantiate(start, zeroPosition, 
             Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
         startTile.transform.SetParent(grid);
 
         correction = startTile.transform.position;
-        zeroPosition = (Vector2)camera.transform.position + correction;
+        Debug.Log(correction);
+        zeroPosition += correction;
         defaultHeight = camera.orthographicSize;
         defaultWidth = camera.orthographicSize * camera.aspect;
         generate = true;
+        tiles = Resources.LoadAll<GameObject>("Tiles");
     }
 
     // Update is called once per frame
