@@ -27,23 +27,27 @@ public class EnemyMove : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 vectorToTarget = player.transform.position - transform.position;
-        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
-        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * speed);
-
-        Vector3 dir = player.transform.position - gameObject.transform.position;
-        gameObject.transform.position += dir.normalized * speed * Time.deltaTime;
-        print(health);
-        if(health == 0)
-        {         
-            sounds[1].PlayOneShot(death);
-            isDead = true;      
-        }
-        if(isDead)
+        if (player != null)
         {
-            if(!sounds[1].isPlaying)
+            Vector3 vectorToTarget = player.transform.position - transform.position;
+            float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+            Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * speed);
+
+            Vector3 dir = player.transform.position - gameObject.transform.position;
+            gameObject.transform.position += dir.normalized * speed * Time.deltaTime;
+            print(health);
+            if (health == 0)
+            {
+                var audio = GameObject.FindGameObjectWithTag("Audio").GetComponent<Audio>();
+                audio.EnemyDeath(death);
                 Destroy(gameObject);
+
+            }
+        }
+        else
+        {
+            speed = 0;
         }
 
     }
@@ -55,7 +59,8 @@ public class EnemyMove : MonoBehaviour
     }
     private void OnCollisionStay2D(Collision2D collision)
     {
-        if (Time.time - begin > 3)
+     
+        if (Time.time - begin > 1)
         {
             var player = collision.gameObject;
             if (player.tag.Equals("Player"))
@@ -64,6 +69,7 @@ public class EnemyMove : MonoBehaviour
                     return;
                 var enemy = collision.gameObject.GetComponent<PlayerMovement>();
                 enemy.Hit(damage);
+                begin = Time.time;
             }
         }
     }
