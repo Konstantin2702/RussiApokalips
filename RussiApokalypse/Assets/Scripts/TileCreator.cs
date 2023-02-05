@@ -48,14 +48,14 @@ public class TileCreator : MonoBehaviour
         startTile.transform.SetParent(grid);
 
         enemyGenerator = players.First(obj => obj.tag == "EnemyGenerator");
-        //if (orientation == 1)
-        //{
-        //    Instantiate(enemyGenerator, zeroPosition + new Vector2(5f, 0f), Quaternion.Euler(0f, 0f, 0f));
-        //}
-        //else
-        //{
+        if (orientation == 1)
+        {
+            Instantiate(enemyGenerator, zeroPosition + new Vector2(5f, 0f), Quaternion.Euler(0f, 0f, 0f));
+        }
+        else
+        {
             Instantiate(enemyGenerator, zeroPosition, Quaternion.Euler(0f, 0f, 0f));
-        //}
+        }
 
 
         correction = startTile.transform.position;
