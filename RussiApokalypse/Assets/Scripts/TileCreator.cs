@@ -25,6 +25,10 @@ public class TileCreator : MonoBehaviour
 
     private GameObject[] tiles;
 
+    private GameObject[] players;
+
+    private GameObject enemyGenerator;
+
     //public GameObject startTile;
 
     System.Random rnd = new System.Random();
@@ -33,15 +37,21 @@ public class TileCreator : MonoBehaviour
     void Start()
     {
         tiles = Resources.LoadAll<GameObject>("Start_finish");
-        orientation = rnd.Next(0, 1);
+        players = Resources.LoadAll<GameObject>("Player");
+        orientation = rnd.Next(9) % 2;
         zeroPosition = (Vector2)camera.transform.position;
         //GameObject start = grid.gameObject.transform.Find("tile_1").gameObject;
         GameObject start = tiles.First(obj => obj.tag == "Start");
+        
         GameObject startTile = Instantiate(start, zeroPosition, 
             Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
         startTile.transform.SetParent(grid);
 
+        enemyGenerator = players.First(obj => obj.tag == "EnemyGenerator");
+        Instantiate(enemyGenerator, zeroPosition, Quaternion.Euler(0f, 0f, 0f));
+
         correction = startTile.transform.position;
+        correction = new Vector2(0f, 0f);
         Debug.Log(correction);
         zeroPosition += correction;
         defaultHeight = camera.orthographicSize;
@@ -89,6 +99,7 @@ public class TileCreator : MonoBehaviour
                 GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)], 
                     zeroPosition, Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
                 newTile.transform.SetParent(grid);
+                Instantiate(enemyGenerator, zeroPosition, Quaternion.Euler(0f, 0f, 0f));
                 generate = false;
             }
         }
@@ -101,6 +112,7 @@ public class TileCreator : MonoBehaviour
                 GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)], 
                     zeroPosition, Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
                 newTile.transform.SetParent(grid);
+                Instantiate(enemyGenerator, zeroPosition - new Vector2(5f, 0f), Quaternion.Euler(0f, 0f, 0f));
                 generate = false;
             }
             
