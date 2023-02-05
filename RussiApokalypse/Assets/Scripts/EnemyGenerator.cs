@@ -7,9 +7,13 @@ public class EnemyGenerator : MonoBehaviour
     public GameObject enemy;
     public Transform spawn;
     private float startTime;
+    public int counter;
+    private int maxEnemies;
     // Start is called before the first frame update
     void Start()
     {
+        counter = 0;
+        maxEnemies = 3;
         startTime = Time.time;
     }
 
@@ -18,9 +22,13 @@ public class EnemyGenerator : MonoBehaviour
     {
         if(Time.time - startTime > 5.0f)
         {
-            GameObject ob = Instantiate(enemy, spawn.position, spawn.rotation);
-            ob.GetComponent<EnemyMove>().health = 100;
-            startTime = Time.time;
+            if (counter < maxEnemies)
+            {
+                GameObject ob = Instantiate(enemy, spawn.position, spawn.rotation);
+                ob.GetComponent<EnemyMove>().health = 100;
+                startTime = Time.time;
+                counter++;
+            }
         }
     }
 }

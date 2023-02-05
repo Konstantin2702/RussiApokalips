@@ -12,13 +12,13 @@ public class TileCreator : MonoBehaviour
     private float defaultHeight;
 
     private float defaultWidth;
-    
+
     public Vector2 zeroPosition;
 
     private int tileSize = 33;
 
     private bool generate;
-    
+
     private Vector2 correction;
 
     private int orientation;
@@ -42,13 +42,21 @@ public class TileCreator : MonoBehaviour
         zeroPosition = (Vector2)camera.transform.position;
         //GameObject start = grid.gameObject.transform.Find("tile_1").gameObject;
         GameObject start = tiles.First(obj => obj.tag == "Start");
-        
-        GameObject startTile = Instantiate(start, zeroPosition, 
+
+        GameObject startTile = Instantiate(start, zeroPosition,
             Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
         startTile.transform.SetParent(grid);
 
         enemyGenerator = players.First(obj => obj.tag == "EnemyGenerator");
-        Instantiate(enemyGenerator, zeroPosition, Quaternion.Euler(0f, 0f, 0f));
+        if (orientation == 1)
+        {
+            Instantiate(enemyGenerator, zeroPosition + new Vector2(5f, 0f), Quaternion.Euler(0f, 0f, 0f));
+        }
+        else
+        {
+            Instantiate(enemyGenerator, zeroPosition, Quaternion.Euler(0f, 0f, 0f));
+        }
+
 
         correction = startTile.transform.position;
         correction = new Vector2(0f, 0f);
@@ -67,7 +75,7 @@ public class TileCreator : MonoBehaviour
         {
             if (Mathf.Abs(camera.transform.position.x - zeroPosition.x) >= tileSize / 2)
             {
-                if(camera.transform.position.x > zeroPosition.x)
+                if (camera.transform.position.x > zeroPosition.x)
                 {
                     zeroPosition.x += tileSize;
                 }
@@ -79,7 +87,7 @@ public class TileCreator : MonoBehaviour
             }
             if (Mathf.Abs(camera.transform.position.y - zeroPosition.y) >= tileSize / 2)
             {
-                if(camera.transform.position.y > zeroPosition.y)
+                if (camera.transform.position.y > zeroPosition.y)
                 {
                     zeroPosition.y += tileSize;
                 }
@@ -90,32 +98,32 @@ public class TileCreator : MonoBehaviour
                 generate = true;
             }
         }
-        
-        if(camera.transform.position.x > zeroPosition.x + defaultWidth)
+
+        if (camera.transform.position.x > zeroPosition.x + defaultWidth)
         {
-            if (generate) 
+            if (generate)
             {
                 zeroPosition.x += tileSize;
-                GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)], 
+                GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)],
                     zeroPosition, Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
                 newTile.transform.SetParent(grid);
                 Instantiate(enemyGenerator, zeroPosition, Quaternion.Euler(0f, 0f, 0f));
                 generate = false;
             }
         }
-        if(camera.transform.position.y > zeroPosition.y + defaultHeight)
+        if (camera.transform.position.y > zeroPosition.y + defaultHeight)
         {
-            if(generate)
+            if (generate)
             {
                 zeroPosition.y += tileSize;
                 Quaternion rot = Quaternion.Euler(0, transform.eulerAngles.y + 45, 0);
-                GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)], 
+                GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)],
                     zeroPosition, Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
                 newTile.transform.SetParent(grid);
                 Instantiate(enemyGenerator, zeroPosition - new Vector2(5f, 0f), Quaternion.Euler(0f, 0f, 0f));
                 generate = false;
             }
-            
+
         }
     }
 }
