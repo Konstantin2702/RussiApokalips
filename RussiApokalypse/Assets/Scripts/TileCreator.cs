@@ -22,15 +22,21 @@ public class TileCreator : MonoBehaviour
 
     private GameObject[] tiles;
 
-    //public GameObject currentTile;
+    public GameObject startTile;
+
+    System.Random rnd = new System.Random();
 
     // Start is called before the first frame update
     void Start()
     {
+        tiles = Resources.LoadAll<GameObject>("Tiles");
+        //GameObject child = grid.gameObject.transform.Find("tile_1").gameObject;
+        correction = startTile.transform.position;
+        //Debug.Log(correction);
         zeroPosition = (Vector2)camera.transform.position + correction;
         defaultHeight = camera.orthographicSize;
         defaultWidth = camera.orthographicSize * camera.aspect;
-        tiles = Resources.LoadAll<GameObject>("Tiles");
+        
         generate = true;
     }
 
@@ -69,12 +75,10 @@ public class TileCreator : MonoBehaviour
         {
             if (generate) 
             {
-                foreach( var tile in tiles )
-                {
-                    zeroPosition.x += tileSize;
-                    GameObject newTile = Instantiate(tile, zeroPosition, Quaternion.identity) as GameObject;
-                    newTile.transform.SetParent(grid);
-                }
+                zeroPosition.x += tileSize;
+                GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)], 
+                    zeroPosition, Quaternion.identity) as GameObject;
+                newTile.transform.SetParent(grid);
                 generate = false;
             }
         }
@@ -82,12 +86,10 @@ public class TileCreator : MonoBehaviour
         {
             if(generate)
             {
-                foreach( var tile in tiles )
-                {
-                    zeroPosition.y += tileSize;
-                    GameObject newTile = Instantiate(tile, zeroPosition, Quaternion.identity) as GameObject;
-                    newTile.transform.SetParent(grid);
-                }
+                zeroPosition.y += tileSize;
+                GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)], 
+                    zeroPosition, Quaternion.identity) as GameObject;
+                newTile.transform.SetParent(grid);
                 generate = false;
             }
             
