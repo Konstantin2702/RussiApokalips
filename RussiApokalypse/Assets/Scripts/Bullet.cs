@@ -5,7 +5,7 @@ public class Bullet : MonoBehaviour
     private Rigidbody2D rb;
 
     private float speed = 15f;
-    private int damage = 20;
+    private int damage = 10;
 
     private int life = 0;
 
@@ -16,7 +16,7 @@ public class Bullet : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.up * speed; //Изменение скорости
-        
+
     }
 
     void Update()
@@ -31,16 +31,21 @@ public class Bullet : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision) //Метод, который срабатывает при попадании
     {
-        if (!collision.gameObject.tag.Equals("Player"))
-        {
-            Explode();
+        Explode();
+        var player = collision.gameObject;
+        if (player.tag.Equals("Enemy"))
+        {          
+            if (player is null)
+                return;
+            var enemy = collision.gameObject.GetComponent<EnemyMove>();
+            enemy.Hit(damage);
         }
     }
 
     void Explode()
     {
-        
         Destroy(gameObject); //Уничтожение объекта
+
     }
 
 

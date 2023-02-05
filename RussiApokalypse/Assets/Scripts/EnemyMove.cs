@@ -1,39 +1,76 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class EnemyMove : MonoBehaviour
 {
-    public GameObject player;
-    public NavMeshAgent navMeshAgent;
+    private GameObject player;
     public float speed;
     public int health;
+    public AudioClip hit;
+    public AudioClip death;
+    private AudioSource[] sounds;
+    private bool isDead = false;
+    private float begin;
+    private int damage = 30;
 
-    private float distanse;
-
-    void Start()
+    private void Start()
     {
-        navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.SetDestination(Vector2.zero);
+        health = 100;
+        sounds = GetComponents<AudioSource>();
+        player = GameObject.FindGameObjectWithTag("Player");
     }
-    // Update is called once per frame
-    //void Update()
-    //{
-    //    distanse = Vector2.Distance(transform.position, player.transform.position);
-    //    Vector2 direction = player.transform.position - transform.position;
-    //    direction.Normalize();
-    //    float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg; 
-    //    transform.position = Vector2.MoveTowards(this.transform.position, player.transform.position, speed * Time.deltaTime);
-    //    transform.rotation = Quaternion.Euler(Vector3.forward * angle);
-    //}
 
-    //private void OnTriggerEnter2D(Collider2D collison)
-    //{
-    //    if (collison.CompareTag("Player"))
-    //    {
-    //        speed = 0;
-    //    }
-    //}
+    // Update is called once per frame
+    void Update()
+    {
+        Vector3 vectorToTarget = player.transform.position - transform.position;
+        float angle = Mathf.Atan2(vectorToTarget.y, vectorToTarget.x) * Mathf.Rad2Deg;
+        Quaternion q = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, q, Time.deltaTime * speed);
+
+        Vector3 dir = player.transform.position - gameObject.transform.position;
+        gameObject.transform.position += dir.normalized * speed * Time.deltaTime;
+        print(health);
+        if(health == 0)
+        {         
+            sounds[1].PlayOneShot(death);
+            isDead = true;      
+        }
+        if(isDead)
+        {
+            if(!sounds[1].isPlaying)
+                Destroy(gameObject);
+        }
+
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        begin = Time.time;
+        
+    }
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (Time.time - begin > 3)
+        {
+            var player = collision.gameObject;
+            if (player.tag.Equals("Player"))
+            {
+                if (player is null)
+                    return;
+                var enemy = collision.gameObject.GetComponent<PlayerMovement>();
+                enemy.Hit(damage);
+            }
+        }
+    }
+    public void Hit(int damage)
+    {
+        health -= damage;
+        sounds[0].PlayOneShot(hit);
+    }
+
 }

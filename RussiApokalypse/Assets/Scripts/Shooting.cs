@@ -20,15 +20,12 @@ public class Shooting : MonoBehaviour
     {
         if (Input.GetButton("Fire1"))
         {
-            print(Time.time - _currentTime);
             if (Time.time - _currentTime > _delay)
             {
                 Shoot();
                 _currentTime = Time.time;
             }
 
-               
-            //Thread.Sleep(100);
         }
     }
 
