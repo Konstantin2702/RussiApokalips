@@ -18,11 +18,13 @@ public class TileCreator : MonoBehaviour
 
     private bool generate;
     
-    private Vector2 correction = new Vector2(-8f, 2.5f);
+    private Vector2 correction;
+
+    private int orientation;
 
     private GameObject[] tiles;
 
-    public GameObject startTile;
+    //public GameObject startTile;
 
     System.Random rnd = new System.Random();
 
@@ -30,13 +32,17 @@ public class TileCreator : MonoBehaviour
     void Start()
     {
         tiles = Resources.LoadAll<GameObject>("Tiles");
-        //GameObject child = grid.gameObject.transform.Find("tile_1").gameObject;
+        orientation = rnd.Next(0, 1);
+
+        //GameObject start = grid.gameObject.transform.Find("tile_1").gameObject;
+        GameObject startTile = Instantiate(tiles[0], zeroPosition, 
+            Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
+        startTile.transform.SetParent(grid);
+
         correction = startTile.transform.position;
-        //Debug.Log(correction);
         zeroPosition = (Vector2)camera.transform.position + correction;
         defaultHeight = camera.orthographicSize;
         defaultWidth = camera.orthographicSize * camera.aspect;
-        
         generate = true;
     }
 
@@ -71,24 +77,25 @@ public class TileCreator : MonoBehaviour
             }
         }
         
-        if(camera.transform.position.x + correction.x > zeroPosition.x + defaultHeight - 1)
+        if(camera.transform.position.x > zeroPosition.x + defaultWidth)
         {
             if (generate) 
             {
                 zeroPosition.x += tileSize;
                 GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)], 
-                    zeroPosition, Quaternion.identity) as GameObject;
+                    zeroPosition, Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
                 newTile.transform.SetParent(grid);
                 generate = false;
             }
         }
-        if(camera.transform.position.y + correction.y > zeroPosition.y + defaultWidth - 1)
+        if(camera.transform.position.y > zeroPosition.y + defaultHeight)
         {
             if(generate)
             {
                 zeroPosition.y += tileSize;
+                Quaternion rot = Quaternion.Euler(0, transform.eulerAngles.y + 45, 0);
                 GameObject newTile = Instantiate(tiles[rnd.Next(0, tiles.Length - 1)], 
-                    zeroPosition, Quaternion.identity) as GameObject;
+                    zeroPosition, Quaternion.Euler(0f, 0f, orientation * 90f)) as GameObject;
                 newTile.transform.SetParent(grid);
                 generate = false;
             }
