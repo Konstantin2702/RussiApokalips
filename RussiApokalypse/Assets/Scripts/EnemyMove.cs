@@ -42,7 +42,8 @@ public class EnemyMove : MonoBehaviour
                 var audio = GameObject.FindGameObjectWithTag("Audio").GetComponent<Audio>();
                 audio.EnemyDeath(death);
                 Destroy(gameObject);
-
+                var generator = GameObject.FindGameObjectWithTag("Audio").GetComponent<EnemyGenerator>();
+                generator.counter--;
             }
         }
         else
