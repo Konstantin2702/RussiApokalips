@@ -7,8 +7,8 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 10f;
     private float health = 100;
     public Rigidbody2D rb;
-    private bool isDead = false;
     public AudioClip death;
+    public AudioClip hit;
     private AudioSource sound;
 
     private Vector2 movement;
@@ -33,23 +33,19 @@ public class PlayerMovement : MonoBehaviour
 
         Vector2 lookDir = mousePos - rb.position;;
         float angle = Mathf.Atan2(lookDir.y, lookDir.x) * Mathf.Rad2Deg - 90f;
-
         rb.rotation = angle;
-
+        print(health);
         if (health < 0)
         {
-            sound.PlayOneShot(death);
-            isDead = true;
-        }
-        if (isDead)
-        {
-            if (!sound.isPlaying)
-                Destroy(gameObject);
+            var audio = GameObject.FindGameObjectWithTag("Audio").GetComponent<Audio>();
+            audio.PlayerDeath(death);
+            Destroy(gameObject);
         }
     }
 
     public void Hit(int damage)
     {
+        sound.PlayOneShot(hit);
         health -= damage;
     }
 }
