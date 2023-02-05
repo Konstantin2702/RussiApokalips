@@ -17,8 +17,7 @@ public class PlayerMovement : MonoBehaviour
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
         mousePos = camera.ScreenToWorldPoint(Input.mousePosition);
-
-
+        GameObject gameObject;
     }
     void FixedUpdate()
     {
