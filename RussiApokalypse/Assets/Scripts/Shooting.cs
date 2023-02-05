@@ -8,7 +8,7 @@ public class Shooting : MonoBehaviour
     public Transform firePoint;
     public GameObject bulletPrefab;
     public AudioClip clip;
-    private double _delay = 0.05;
+    private double _delay = 0.2;
     private double _currentTime;
 
     // Update is called once per frame
@@ -18,7 +18,6 @@ public class Shooting : MonoBehaviour
     }
     void Update()
     {
-
         if (Input.GetButton("Fire1"))
         {
             print(Time.time - _currentTime);
